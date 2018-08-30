@@ -1,0 +1,950 @@
+#:import Factory kivy.factory.Factory
+
+
+
+MainScreen:
+	BoxLayout:
+		size_hint: (1,1)
+		orientation: 'vertical'
+		canvas.before:
+			Color:
+				rgba: (1,1,1,1)
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		AnchorLayout:
+			canvas.before:
+				Color:
+					rgba: (1,1,1,1)
+				Rectangle:
+					pos: self.pos
+					size: self.size
+			size_hint: (0.8,0.07)
+			anchor_x: 'left'
+			Button:
+				size_hint: (0.33,0.9)
+				background_color: (1,1,1,0)
+				on_release: root.mainmenu.open(self)
+				canvas.before:
+					Color:
+						rgba: (1,1,1,1)
+					Rectangle:
+						pos: self.pos
+						size: (self.width/3,self.height)
+						source: 'dropdown.png'
+		BoxLayout:
+			size_hint: (1,0.9)
+			SettingsScreenManager:
+				id: ssm
+
+
+<SettingsScreenManager>:
+	id: settingsscreenmanager
+	size_hint: (1,1)
+	present_location: ''
+	LoadingScreen:
+		name: 'LoadingScreen'
+	Home:
+		name: 'Home'
+	Setings:
+		name: 'Settings'
+	LocationSettings:
+		name: 'LocationSettings'
+	DeviceScreen:
+		name: 'DeviceScreen'
+	Config:
+		name: 'Config'
+
+<Config>:
+	name: 'Config'
+	AnchorLayout:
+		size_hint: (1,1)
+		BoxLayout:
+			size_hint: (1,0.5)
+			orientation: 'vertical'
+			BoxLayout:
+				size_hint: (1,0.4)
+				orientation: 'vertical'
+				Label:
+					size_hint: (1,0.5)
+					color: (0.85,0.85,0.85,1)
+					markup: True
+					text: 'Server IP'
+					text_size: self.size
+					font_size: '17sp'
+					halign: 'center'
+					valign: 'bottom'
+				AnchorLayout:
+					size_hint: (1,0.5)
+					TextInput:
+						id: server_ip_text
+						size_hint: (0.7,0.5)
+						background_color: (0.94,0.94,0.94,0)
+						border: (0,0,0,0)
+						cursor_color: (0,0,0,1)
+						foreground_color: (0,0,0,1)
+						font_size: self.height/2
+						multiline: False
+						text_size: self.size
+			    		canvas.before:
+							Color:
+								rgba: 0,0,0,1
+							Line:
+								width: 0.4
+								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+			BoxLayout:
+				size_hint: (1,0.4)
+				orientation: 'vertical'
+				Label:
+					size_hint: (1,0.5)
+					color: (0.85,0.85,0.85,1)
+					markup: True
+					text: 'Client ID'
+					text_size: self.size
+					font_size: '17sp'
+					halign: 'center'
+					valign: 'bottom'
+				AnchorLayout:
+					size_hint: (1,0.5)
+					TextInput:
+						id: client_id_text
+						size_hint: (0.7,0.5)
+						background_color: (0.94,0.94,0.94,0)
+						border: (0,0,0,0)
+						cursor_color: (0,0,0,1)
+						foreground_color: (0,0,0,1)
+						font_size: self.height/2
+						multiline: False
+						text_size: self.size
+			    		canvas.before:
+							Color:
+								rgba: (0,0,0,1)
+							Line:
+								width: 0.4
+								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+
+			AnchorLayout:
+				size_hint: (1,0.2)
+				Button:
+					size_hint: (0.24,0.5)
+					text: 'SAVE'
+					on_press: root.save()
+					background_color: (1,1,1,0) 
+				    canvas.before:
+				        Color:
+				            rgba: (0,0.6,0.796,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]				
+
+<Setings>:
+	locations: {}
+	on_locations: root.update_locations()
+	on_enter: self.load_screen()
+	StackLayout:
+		size_hint: (1,1)
+		orientation: 'lr-tb'
+		spacing: 1
+		canvas.before:
+			Color:
+				#rgba: (0.258,0.815,0.819,1)
+				#rgba: (0.235,0.141,0.431,1)
+				rgba: (1,1,1,1)
+			Rectangle:
+				pos: self.pos
+				size: self.size
+			
+		BoxLayout:
+			orientation: 'vertical'
+			size_hint: (1,0.1)
+			spacing: 4
+			Label:
+				size_hint: (1,0.4)
+				#color: (0.454,0.894,0.909,1)
+				color: (0.75,0.75,0.75,1)
+				markup: True
+				text: 'Add Location'
+				text_size: self.size
+				font_size: '17sp'
+				halign: 'center'
+				valign: 'middle'
+				
+			AnchorLayout:
+				size_hint: (1,0.4)
+				BoxLayout: 
+					size_hint: (0.9,1)
+					orientation: 'horizontal'
+					spacing: 7
+					TextInput:
+						id: location_text
+						size_hint: (0.6,1)
+						background_color: (0.94,0.94,0.94,0)
+						#background_normal: ''
+						border: (0,0,0,0)
+						cursor_color: (0,0,0,1)
+						foreground_color: (0,0,0,1)
+						font_size: self.height/2
+						multiline: False
+						text_size: self.size
+			    		canvas.before:
+							Color:
+								rgba: 0,0,0,1
+							Line:
+								width: 0.4
+								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+					
+						
+					Button:
+						size_hint: (0.3,1)
+						id: add_location_button
+						text: 'ADD'
+						on_press: root.add_location()
+						background_color: (1,1,1,0) 
+					    canvas.before:
+					        Color:
+					            rgba: (0,0.6,0.796,1)
+					        RoundedRectangle:
+					            pos: self.pos
+					            size: self.size
+					            radius: [4,]
+		
+		ScrollView:
+			id: scrv
+			size_hint: (0.97,0.8)
+			on_scroll_y: root.slider_change(self.scroll_y)
+			background_color: 1,1,1,1
+			GridLayout:
+				id: location_list
+				cols: 1 
+				background_color: 1,1,1,1
+				size_hint_y: None
+				height: self.minimum_height
+
+		AnchorLayout: 
+			size_hint: (0.97,0.07)
+			Button:
+				size_hint: (0.35,0.75)
+				on_press: root.save()
+				text: 'SAVE'
+				background_color: (1,1,1,0) 
+			    canvas.before:
+			        Color:
+			            rgba: (0,0.6,0.796,1)
+			        RoundedRectangle:
+			            pos: self.pos
+			            size: self.size
+			            radius: [4,]
+		Sld:
+			id: slider
+			background_color: (0,0,0,1)
+			on_value: root.scroll_change(self.value)
+
+
+	
+	
+<TypeMenu>:
+	Button:
+		background_color: (1,1,1,0) 
+		text: 'Light'
+		size_hint_y: None
+		height: 35
+		on_press: root.select('Light')
+		canvas.before:
+		    Color:
+		        rgba: (0,0.6,0.796,1)
+		    RoundedRectangle:
+		        pos: self.pos
+		        size: self.size
+		        radius: [4,]
+	Button:
+		background_color: (1,1,1,0) 
+		text: 'Fan'
+		size_hint_y: None
+		height: 35
+		on_press: root.select('Fan')
+		canvas.before:
+		    Color:
+		        rgba: (0,0.6,0.796,1)
+		    RoundedRectangle:
+		        pos: self.pos
+		        size: self.size
+		        radius: [4,]		
+	Button:
+		background_color: (1,1,1,0) 
+		text: 'Curten'
+		size_hint_y: None
+		height: 35
+		on_press: root.select('Curten')
+		canvas.before:
+		    Color:
+		        rgba: (0,0.6,0.796,1)
+		    RoundedRectangle:
+		        pos: self.pos
+		        size: self.size
+		        radius: [4,]
+
+<MainMenu>:
+	Button:
+		background_color: (1,1,1,0) 
+		text: 'Home'
+		size_hint_y: None
+		height: 35
+		color: (0,0,0,1)
+		on_press: root.select('Home')
+		canvas.before:
+		    Color:
+		        rgba: (1,1,1,1)
+		    RoundedRectangle:
+		        pos: self.pos
+		        size: self.size
+		        radius: [4,]
+	Button:
+		background_color: (1,1,1,0) 
+		text: 'Config'
+		size_hint_y: None
+		color: (0,0,0,1)
+		height: 35
+		on_press: root.select('Settings')
+		canvas.before:
+		    Color:
+		        rgba: (1,1,1,1)
+		    RoundedRectangle:
+		        pos: self.pos
+		        size: self.size
+		        radius: [4,]		
+	Button:
+		background_color: (1,1,1,0) 
+		text: 'Settings'
+		size_hint_y: None
+		color: (0,0,0,1)
+		height: 35
+		on_press: root.select('Config')
+		canvas.before:
+		    Color:
+		        rgba: (1,1,1,1)
+		    RoundedRectangle:
+		        pos: self.pos
+		        size: self.size
+		        radius: [4,]
+
+
+<LocationSettings>:
+	type_selected: 'TYPE'
+	location_name: ''
+	on_enter: self.load_screen()
+	StackLayout:
+		id: stack
+		size_hint: (1,1)
+		orientation: 'lr-tb'
+		spacing: 1		
+		canvas.before:
+			Color:
+				#rgba: (0.258,0.815,0.819,1)
+				#rgba: (0.235,0.141,0.431,1)
+				rgba: (1,1,1,1)
+			Rectangle:
+				pos: self.pos
+				size: self.size
+
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: (1,0.07)
+			Button:
+				background_color: (1,1,1,0)
+				color: (0.75,0.75,0.75,1)
+				size_hint: (0.07,1)
+				on_press: root.previous()
+				markup: True
+				text: '[b]<[/b]'
+				text_size: self.size
+				halign: 'center'
+				valign: 'middle'
+				font_size: '30sp'
+
+			Label:
+				size_hint: (0.6,1)
+				#color: (0.454,0.894,0.909,1)
+				color: (0.8,0.8,0.8,1)
+				markup: True
+				text: '[b]'+root.location_name+'[/b]'
+				text_size: self.size
+				font_size: '19sp'
+				halign: 'center'
+				valign: 'middle'
+
+		BoxLayout:
+			orientation: 'vertical'
+			size_hint: (1,0.1)
+			spacing: 4
+			Label:
+				size_hint: (1,0.4)
+				#color: (0.454,0.894,0.909,1)
+				color: (0.75,0.75,0.75,1)
+				markup: True
+				text: 'Add Device'
+				text_size: self.size
+				font_size: '17sp'
+				halign: 'center'
+				valign: 'middle'
+				
+			AnchorLayout:
+				size_hint: (1,0.4)
+				BoxLayout: 
+					size_hint: (0.9,1)
+					orientation: 'horizontal'
+					spacing: 7
+					TextInput:
+						id: device_text
+						size_hint: (0.4,1)
+						background_color: (0.94,0.94,0.94,0)
+						#background_normal: ''
+						border: (0,0,0,0)
+						cursor_color: (0,0,0,1)
+						foreground_color: (0,0,0,1)
+						font_size: self.height/2
+						multiline: False
+						text_size: self.size
+			    		canvas.before:
+							Color:
+								rgba: 0,0,0,1
+							Line:
+								width: 0.4
+								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+					
+					Button:
+						size_hint: (0.25,1)
+						id: add_location_button
+						text: root.type_selected
+						on_release: root.typemenu.open(self)
+						background_color: (1,1,1,0) 
+					    canvas.before:
+					        Color:
+					            rgba: (0,0.6,0.796,1)
+					        RoundedRectangle:
+					            pos: self.pos
+					            size: self.size
+					            radius: [4,]
+						
+					Button:
+						size_hint: (0.25,1)
+						id: add_location_button
+						text: 'ADD'
+						on_press: root.add_device()
+						background_color: (1,1,1,0) 
+					    canvas.before:
+					        Color:
+					            rgba: (0,0.6,0.796,1)
+					        RoundedRectangle:
+					            pos: self.pos
+					            size: self.size
+					            radius: [4,]
+		
+		ScrollView:
+			id: scrv
+			size_hint: (0.97,0.85)
+			on_scroll_y: root.slider_change(self.scroll_y)
+			background_color: 1,1,1,1
+			GridLayout:
+				id: device_list
+				cols: 1 
+				background_color: 1,1,1,1
+				size_hint_y: None
+				height: self.minimum_height
+
+		Sld:
+			id: slider
+			background_color: (0,0,0,1)
+			on_value: root.scroll_change(self.value)	
+	
+<LoadingScreen>:
+	canvas.before:
+		Color:
+			rgba: 1,1,1,1
+		Rectangle:
+			pos: self.pos
+			size: self.size
+	Label:
+		size_hint: (1,1)
+		markup: True
+		text: '[b]Loading.....[/b]'
+		color: (0,0,0,1)	
+		text_size: self.size
+		halign: 'center'
+		valign: 'bottom'
+		font_size: '35sp'
+			
+<Home>:
+	on_enter: self.load_screen()
+	StackLayout:
+		orientation: 'lr-tb'
+		spacing: 1
+		canvas.before:
+			Color:
+				rgba: 1,1,1,1
+			Rectangle:
+				pos: self.pos
+				size: self.size
+		Label:
+			size_hint: (1,0.1)
+			markup: True
+			#color: (0.258,0.815,0.819,1)
+			color: 0.627,0.674,0.674,1
+			text: '[b]Location[/b]'
+			text_size: self.size
+			halign: 'center'
+			valign: 'bottom'
+			font_size: '35sp' 
+
+		ScrollView:
+			id: scrv
+			size_hint: (0.97,0.9)
+			on_scroll_y: root.slider_change(self.scroll_y)
+			background_color: 1,1,1,1
+			GridLayout:
+				id: location_list
+				cols: 1 
+				background_color: 1,1,1,1
+				size_hint_y: None
+				height: self.minimum_height
+				
+		Sld:
+			id: slider
+			background_color: (0,0,0,1)
+			on_value: root.scroll_change(self.value)
+
+<DeviceScreen>:
+	on_enter: self.load_screen()
+	location_name: ''
+	StackLayout:
+		orientation: 'lr-tb'
+		spacing: 1
+		canvas.before:
+			Color:
+				#rgba: (0.258,0.815,0.819,1)
+				#rgba: (0.235,0.141,0.431,1)
+				rgba: (1,1,1,1)
+			Rectangle:
+				pos: self.pos
+				size: self.size
+				#source: 'new_back.png'
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: (1,0.1)
+			Button:
+				background_color: (1,1,1,0)
+				color: (0.75,0.75,0.75,1)
+				size_hint: (0.07,1)
+				markup: True
+				text: '[b]<[/b]'
+				text_size: self.size
+				halign: 'center'
+				valign: 'middle'
+				font_size: '30sp'
+			Label:
+				size_hint: (0.6,1)
+				#color: (0.454,0.894,0.909,1)
+				color: (0.75,0.75,0.75,1)
+				markup: True
+				text: '[b]'+root.location_name+'[/b]'
+				text_size: self.size
+				font_size: '20sp'
+				halign: 'center'
+				valign: 'middle'
+
+		ScrollView:
+			id: scrv
+			size_hint: (0.97,0.9)
+			on_scroll_y: root.slider_change(self.scroll_y)
+			background_color: 1,1,1,1
+			GridLayout:
+				id: device_list
+				cols: 1 
+				background_color: 1,1,1,1
+				size_hint_y: None
+				height: self.minimum_height
+				
+		Sld:
+			id: slider
+			background_color: (0,0,0,1)
+			on_value: root.scroll_change(self.value)
+
+	
+				
+
+<Location>:
+	size_hint: (1,None)
+	color: (0.258,0.815,0.819,1)
+	background_color: (1,1,1,0)
+	markup: True
+	text: '[u][b][i]Living Room[/i][/b][/u]'
+	text_size: self.size
+	halign: 'center'
+	text_size: self.size
+	font_size: '24sp'
+	valigh: 'middle'
+	on_press: self.yes()
+
+
+<AddLocationPopup>:
+	size_hint: (0.8,0.37)
+    auto_dismiss: False
+    title: 'Add Location'
+    separator_height: '2dp'
+    background_color: (1,1,1,0)
+    background: 'grey.png'
+    title_color: (0,0,0,1)
+	canvas.before:
+		Color:
+			rgba: (0.94,0.94,0.94,0.95)
+		Rectangle:
+			pos: self.pos
+			size: self.size
+    BoxLayout:
+    	background_color: (1,1,1,0)
+    	size_hint: (1,1)
+    	orientation: 'vertical'
+    	AnchorLayout:
+	    	Label:
+	    		size_hint: (1,0.5)
+	    		color: (0,0,0,1)
+	        	text: 'Location Name ?'
+	        	text_size: self.size
+				halign: 'center'
+				font_size: '15sp'
+				valigh: 'middle'
+		AnchorLayout:
+			TextInput:
+				id: location_text
+				background_color: (0.94,0.94,0.94,0)
+				#background_normal: ''
+				border: (0,0,0,0)
+				cursor_color: (0,0,0,1)
+				foreground_color: (0,0,0,1)
+				font_size: self.height/2
+				multiline: False
+				text_size: self.size
+	    		canvas.before:
+					Color:
+						rgba: 0,0,0,1
+					Line:
+						width: 0.4
+						rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+
+				size_hint: (0.6,0.5)
+		AnchorLayout:
+			Button:
+				size_hint: (0.5,0.5)
+				id: save_button
+				text: 'SAVE'
+				on_press: root.save()
+				background_color: (1,1,1,0) 
+			    canvas.before:
+			        Color:
+			            rgba: (0,0.6,0.796,1)
+			        RoundedRectangle:
+			            pos: self.pos
+			            size: self.size
+			            radius: [4,]
+ 
+ 
+<DeviceWidget>:
+	size_hint_y: None
+	BoxLayout:
+		size_hint:(0.8,0.9)
+		orientation: 'horizontal'
+		canvas.before:
+			Color:
+				rgba: (0.94,0.94,0.94,0.95)
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [4,]
+		BoxLayout:
+			size_hint: (0.65,1)
+			orientation: 'vertical'					
+			Label:
+				size_hint: (1,0.5)
+				markup: True
+				color: (0.3,0.3,0.3,1)
+				text: '[b]'+root.device_name+'[/b]'
+				text_size: self.size
+				font_size: '17sp'
+				halign: 'center'
+				valign: 'middle'
+
+			Label:
+				size_hint: (1,0.5)
+				color: (0.5,0.5,0.5,1)
+				markup: True
+				text: 'type'+root.device_type
+				text_size: self.size
+				font_size: '15sp'
+				halign: 'center'
+				valign: 'top'
+		AnchorLayout:
+			size_hint: (0.35,1)
+			Button:
+				id: RemoveDevice
+				size_hint: (0.85,0.4)
+				text: 'Remove'
+				background_color: (1,1,1,0)
+				color: (1,1,1,1)
+				#on_press: root.pressed_pause()
+			    canvas.before:
+			        Color:
+			            rgba: (0,0.6,0.796,1)
+			        RoundedRectangle:
+			            pos: self.pos
+			            size: self.size
+			            radius: [4,]
+					 
+				 		
+
+       
+<LocationWidget>:
+	size_hint_y : None
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint: (0.9,0.94)
+		canvas.before:
+			Color:
+				rgba: (0.94,0.94,0.94,0.95)
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [4,]
+		Label:
+			text: root.location_name
+			markup: True
+			color: (0.5,0.5,0.5,1)
+			text_size: self.size
+			font_size: '17sp'
+			valign: 'middle'
+			halign: 'center'
+			size_hint: (1,0.5)
+		
+		AnchorLayout:
+			size_hint: (1,0.5)
+			BoxLayout:
+				size_hint: (0.7,0.6)
+				orientation: 'horizontal'
+				spacing: 20
+				
+				Button:
+					id: EditDevices
+					text: 'Edit Devices'
+					#on_press: root.pressed_onof()
+					background_color: (1,1,1,0)
+				    canvas.before:
+				        Color:
+				            rgba: (0,0.6,0.796,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]
+
+
+				Button:
+					id: RemoveLocation
+					text: 'Remove'
+					background_color: (1,1,1,0)
+					color: (1,1,1,1)
+				    canvas.before:
+				        Color:
+				            rgba: (0,0.6,0.796,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]
+					
+<LightWidget>:
+	id: ligwid
+	size_hint_y: None
+	#status: 'ON'
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint: (0.9,0.94)
+		canvas.before:
+			Color:
+				rgba: (0.94,0.94,0.94,0.95)
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [4,]
+		Label:	
+			id: device_label
+			text: '[b]'+root.device_label+'[/b]'
+			markup: True
+			color: (0.5,0.5,0.5,1)
+			#color: (0.482,0.556,0.549,1)
+			text_size: self.size
+			halign: 'center'
+			text_size: self.size
+			font_size: '17sp'
+			valigh: 'middle'
+			size_hint: (1,0.5)
+		AnchorLayout:
+			size_hint: (1,0.5)
+
+			Button:
+				size_hint: (0.35,0.6)
+				id: on_off_button
+				text: root.status
+				on_press: root.pressed()
+				background_color: (1,1,1,0) 
+			    canvas.before:
+			        Color:
+			            rgba: (0,0.6,0.796,1) if root.status=='ON' else (0,0,0,1)
+			        RoundedRectangle:
+			            pos: self.pos
+			            size: self.size
+			            radius: [4,]
+
+
+<FanWidget>:
+	id: fanwid
+	size_hint_y: None
+	#status: 0
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint: (0.9,0.94)
+		canvas.before:
+			Color:
+				rgba: (0.94,0.94,0.94,0.95)
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [4,]
+		Label:	
+			id: on_off_label
+			text: '[b]'+root.device_label+'[/b]'
+			color: (0.5,0.5,0.5,1)
+			markup: True
+			halign: 'center'
+			text_size: self.size
+			valigh: 'middle'
+			font_size: '17sp'
+			size_hint: (1,0.5)
+		Slider:
+			id: fan_slider
+			cursor_size: (25,25)
+			background_width: 3
+			background_horizontal: 'black.jpg'
+			border_horizontal: [0,20,0,20]
+			value: float(root.status)
+			on_value: root.on_slid()
+			value_track: True
+			value_track_width: 2
+			value_track_color: (0,0.6,0.796,1)
+			min: 0
+			max: 100
+			orientation: 'horizontal'
+			background_color: (0,0,0,1)
+			size_hint:(1,0.5)
+			step: 20
+			
+<CurtenWidget>:
+	id: curtwid
+	size_hint_y: None
+	#status: 'ON'
+	BoxLayout:
+		orientation: 'vertical'
+		size_hint: (0.9,0.94)
+		canvas.before:
+			Color:
+				rgba: (0.94,0.94,0.94,1)
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [4,]
+		
+		Label:	
+			id: on_off_label
+			text: '[b]'+root.device_label+'[/b]'
+			markup: True
+			color: (0.5,0.5,0.5,1)
+			text_size: self.size
+			halign: 'center'
+			text_size: self.size
+			font_size: '17sp'
+			valigh: 'middle'
+			size_hint: (1,0.5)
+
+		
+		AnchorLayout:
+			size_hint: (1,0.5)
+			BoxLayout:
+				size_hint: (0.7,0.6)
+				orientation: 'horizontal'
+				spacing: 20
+				
+				Button:
+					id: on_off_button
+					text: root.status
+					on_press: root.pressed_onof()
+					background_color: (1,1,1,0)
+				    canvas.before:
+				        Color:
+				            rgba: (0,0.6,0.796,1) if root.status=='ON' else (0,0,0,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]
+
+
+				Button:
+					id: stop_button
+					text: 'STOP'
+					background_color: (1,1,1,0)
+					color: (1,0,0,1)
+					on_press: root.pressed_pause()
+				    canvas.before:
+				        Color:
+				            rgba: (1,1,0.4,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]
+
+
+
+<Sld>:
+	min: 0
+	max: 1
+	value: 1
+	cursor_image: 'slider_cursor.jpg'
+	cursor_size: (0,0)
+	background_width: 0
+	orientation: 'vertical'
+	step: 0.01
+	size_hint: (0.02,0.9)
+
+
+<ControlScreen>:
+	BoxLayout:
+		size_hint: (1,1)
+		orientation: 'vertical'
+		BoxLayout:
+			size_hint: (1,0.1)
+			orientation: 'horizontal'
+			Button:
+				size_hint: (0.2,1)
+				canvas.before:
+					Rectangle:
+						source: 'back.png'
+						pos: self.pos
+						size: self.size
+			Label:
+				size_hint: (0.8,1)
+				text_size: self.size
+				halign: 'center'
+				font_size: '27sp'
+				valigh: 'middle'
+				color: (0,0,0,1)
+				text: 'BED ROOM'
+		BoxLayout:
+			size_hint: (1,0.7)
+		BoxLayout:
+			size_hint: (1,0.2)
+			
