@@ -127,12 +127,6 @@ class DeviceScreen(Screen):
 		self.ids.device_list.clear_widgets()
 		for name, wgt in widget_dict[self.location_name].iteritems():
 				self.ids.device_list.add_widget(wgt)
-			# elif device['type'] == 'Fan':
-			# 	fan_widget = FanWidget(height=100,device_label=device['name'])
-			# 	self.ids.device_list.add_widget(fan_widget)
-			# elif device['type'] == 'Curten':
-			# 	curten_widget = CurtenWidget(height=100,device_label=device['name'])
-			# 	self.ids.device_list.add_widget(curten_widget)
 			 
 
 	def slider_change(self,value):
@@ -213,7 +207,7 @@ class Setings(Screen):
 	
 	def save(self):
 		global app_config
-		global widget_dict
+		global widget_dict     
 		app_config = self.parent.config_dict
 		widget_dict = {}
 		for location in app_config:
@@ -222,13 +216,13 @@ class Setings(Screen):
 				print 'device = ' 
 				print device
 				if device['type'] == 'Light':
-					light_widget = LightWidget(height=100,device_label=device['name'],device_location=location)
+					light_widget = LightWidget(height=100,device_name=device['name'],device_type=device['type'],device_location=location)
 					widget_dict[location][device['name']] = light_widget
 				elif device['type'] == 'Fan':
-					fan_widget = FanWidget(height=100,device_label=device['name'],device_location=location)
+					fan_widget = FanWidget(height=100,device_name=device['name'],device_type=device['type'],device_location=location)
 					widget_dict[location][device['name']] = fan_widget
 				elif device['type'] == 'Curten':
-					curten_widget = CurtenWidget(height=100,device_label=device['name'],device_location=location)
+					curten_widget = CurtenWidget(height=100,device_name=device['name'],device_type=device['type'],device_location=location,device_ttime=device['time'])
 					widget_dict[location][device['name']] = curten_widget
 		self.parent.transition = SlideTransition(direction='left')
 		self.parent.current = 'Home'
@@ -250,19 +244,32 @@ class LocationSettings(Screen):
 		for device in self.parent.config_dict[self.parent.present_config_location]:
 			print device['name']
 			print device['type']
-			device_widget = DeviceWidget(height=80,device_name=device['name'],device_type=device['type'])
+			if device['type'] == 'Curten':
+				device_widget = DeviceCurtainWidget(height=80,device_name=device['name'],device_type=device['type'],device_ttime=device['time']) 
+				device_index = self.parent.config_dict[self.parent.present_config_location].index(device)
+				settime_callback = partial(self.set_time,device_index,device_widget)
+				device_widget.ids.SetTime.bind(on_press=settime_callback)
+			else:
+				device_widget = DeviceWidget(height=80,device_name=device['name'],device_type=device['type'])
 			device_index = self.parent.config_dict[self.parent.present_config_location].index(device)
 			removedevice_callback = partial(self.remove_device,device_index)
 			device_widget.ids.RemoveDevice.bind(on_press=removedevice_callback)
+			
 			print device_widget.device_name
 			self.ids.device_list.add_widget(device_widget)
+
+	def set_time(self,index,device_widgt,instance):
+		print instance
+		print index
+		total_time = str(device_widgt.ids.curtain_time.text)
+		self.parent.config_dict[self.parent.present_config_location][index]['time'] = total_time
 
 	def selection(self,instance,x):
 		self.type_selected = x
 
 	def add_device(self):
 		#global locations_added
-		device_dict = {'name':self.ids.device_text.text,'type':self.type_selected}
+		device_dict = {'name':self.ids.device_text.text,'type':self.type_selected,'time':''}
 		self.parent.config_dict[self.parent.present_config_location].append(device_dict)
 		self.load_screen()
 
@@ -298,50 +305,57 @@ class DeviceWidget(AnchorLayout):
 	# 	super(DeviceWidget, self).__init__(**kwargs)
 	# 	self.device_name = ''
 	# 	self.device_type = ''
-
+class DeviceCurtainWidget(AnchorLayout):
+	device_name = StringProperty('')
+	device_type = StringProperty('')
+	device_time = StringProperty('')
 
 class LightWidget(AnchorLayout):
-	device_label = StringProperty('')
+	device_name = StringProperty('')
+	device_type = StringProperty('')
 	device_location = StringProperty('')
+	device_value = StringProperty('')
 	status = StringProperty('OFF')
-	# def __init__(self,**kwargs):
-	# 	super(LightWidget, self).__init__(**kwargs)	
 
 	def pressed(self):
 		
 		if self.status == 'ON':
-			msg = 'OFF'
+			self.device_value = 'OFF'
 		else:
-			msg = 'ON'
-		print self.device_location
-		print self.device_label
-		final_msg = str(self.device_location + '_' + self.device_label + '_' + msg)
+			self.device_value = 'ON'
+		final_msg = str(self.device_location + '_' + self.device_type + '_' + self.device_name + '_' + self.device_value)
 		print final_msg
 		osc.sendMsg('/command',[final_msg],port=3000)
 
 class FanWidget(AnchorLayout):
-	device_label = StringProperty('')
+	device_name = StringProperty('')
 	device_location = StringProperty('')
+	device_type = StringProperty('')
+	device_value = StringProperty('')
 	status = StringProperty('0')
-	# def __init__(self,**kwargs):
-	# 	super(FanWidget, self).__init__(**kwargs)	
+	slid_value = 0
 
 	def on_slid(self):
-		print 'yes'
-		# self.status = self.ids.fan_slider.value
-		# if self.status <= 40:
-		# 	self.ids.fan_slider.value_track_color = (0,0,0,1)
-		# elif self.status > 40 and self.status <= 60:
-		# 	self.ids.fan_slider.value_track_color = (0.015,0,0.207,1)
-		# else:
-		# 	self.ids.fan_slider.value_track_color = (0.047,0,0.63,1)
+		self.device_value = str(self.ids.fan_slider.value)
+		final_msg = str(self.device_location + '_' + self.device_type + '_' + self.device_name + '_' + self.device_value)
+		print final_msg
+		osc.sendMsg('/command',[final_msg],port=3000)
 
 class CurtenWidget(AnchorLayout):
-	device_label = StringProperty('')
+	device_name = StringProperty('')
 	device_location = StringProperty('')
+	device_type = StringProperty('')
+	device_value = StringProperty('')
+	device_ttime = StringProperty('')
 	status = StringProperty('OFF')
-	# def __init__(self,**kwargs):
-	# 	super(CurtenWidget, self).__init__(**kwargs)	
+	slid_value = 0
+
+	def on_slid(self):
+		self.device_value = str(self.ids.curtain_slider.value)
+		print self.ids.curtain_slider.value
+		final_msg = str(self.device_location + '_' + self.device_type + '_' + self.device_name + '_' + self.device_value + '_' + self.device_ttime)
+		print final_msg
+		osc.sendMsg('/command',[final_msg],port=3000)
 
 	def pressed_onof(self):
 		if self.status == 'ON':
@@ -359,6 +373,7 @@ design = Builder.load_file("design.kv")
 class MyApp(App):
 	def on_acknowledge(self, message, *args):
 		global widget_dict
+		print 'received'
 		msg = message[2]
 		msg_arr = msg.split('_')
 		location_name = msg_arr[0]

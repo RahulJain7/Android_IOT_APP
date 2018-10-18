@@ -1,0 +1,19 @@
+There were 2 parts to the project 
+
+1. front end application development: The code files were sent to the client long back ( date : ). As it was agreed in the starting the application is fully developed in python. 
+
+2. Although the project didnt involved that much of the backend work it was just to integrate the communication between the developed app and their bakcend server. This file was also sent along with the application files. I can show the demo and proove that if you run both the application and backend file it completes the requirement. 
+
+3. After sending the latest backend file on the freelancer chat the client was stuck on looking at the old files for 3 days. I had to send the file 2 times for him to figure out which is the new file. I also insisted on changing the file sharing platform if that is not comfortable. Who will take the responsibility for these 3 days, where the work is on hault.
+
+4. Lastely the project architecture went on a lot of change during the project execution, there were a lot of discussions regarding the backend approach, which is the main cause of delay. Still I considered it and I agreed that because the project is delayed you can reduce a percentage of the totol amount. Threrefore, it was decided that 75% of the total amount will be the new payable now.
+
+5. Now the only part that we are stuck along for such a long time is the deployment on the client's system. 
+
+* Firstly I never agreeed to help you deploy it on your system it was completely your responsibility. I did agreed for testing not for deployment. 
+
+* Secondly, I wanted to close the project so I got convinced to deploy it on the client's computer. But the lack of resource full ness showed by the client was unberable. App development and testing cannot be done on mini processors like Raspberry pi. Although a mac (OSx) was provided by the client for 2 days and they were forcing me to finish the project within this time span. Working remotely comes at its own cost, it is very much dependent on the internet speed and the remote software under consideration. 
+
+6. Presently the client has all the files (frontend application and the backend file). If you take suggestion from any other freelancer who is a decent python coder, he can easily compile the application and test the backend file its not more than a 3500 Rs job. Therefore I request to you atlease release 50% of the project deliverables.
+
+

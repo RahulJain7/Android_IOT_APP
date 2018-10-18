@@ -60,16 +60,16 @@ MainScreen:
 	AnchorLayout:
 		size_hint: (1,1)
 		BoxLayout:
-			size_hint: (1,0.5)
+			size_hint: (1,0.8)
 			orientation: 'vertical'
 			BoxLayout:
-				size_hint: (1,0.4)
+				size_hint: (1,0.2)
 				orientation: 'vertical'
 				Label:
 					size_hint: (1,0.5)
 					color: (0.85,0.85,0.85,1)
 					markup: True
-					text: 'Server IP'
+					text: 'Home Server IP'
 					text_size: self.size
 					font_size: '17sp'
 					halign: 'center'
@@ -93,13 +93,13 @@ MainScreen:
 								width: 0.4
 								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
 			BoxLayout:
-				size_hint: (1,0.4)
+				size_hint: (1,0.2)
 				orientation: 'vertical'
 				Label:
 					size_hint: (1,0.5)
 					color: (0.85,0.85,0.85,1)
 					markup: True
-					text: 'Client ID'
+					text: 'Home Client ID'
 					text_size: self.size
 					font_size: '17sp'
 					halign: 'center'
@@ -122,7 +122,66 @@ MainScreen:
 							Line:
 								width: 0.4
 								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
-
+			BoxLayout:
+				size_hint: (1,0.2)
+				orientation: 'vertical'
+				Label:
+					size_hint: (1,0.5)
+					color: (0.85,0.85,0.85,1)
+					markup: True
+					text: 'DNS Server IP'
+					text_size: self.size
+					font_size: '17sp'
+					halign: 'center'
+					valign: 'bottom'
+				AnchorLayout:
+					size_hint: (1,0.5)
+					TextInput:
+						id: server_ip_text
+						size_hint: (0.7,0.5)
+						background_color: (0.94,0.94,0.94,0)
+						border: (0,0,0,0)
+						cursor_color: (0,0,0,1)
+						foreground_color: (0,0,0,1)
+						font_size: self.height/2
+						multiline: False
+						text_size: self.size
+			    		canvas.before:
+							Color:
+								rgba: 0,0,0,1
+							Line:
+								width: 0.4
+								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+			BoxLayout:
+				size_hint: (1,0.2)
+				orientation: 'vertical'
+				Label:
+					size_hint: (1,0.5)
+					color: (0.85,0.85,0.85,1)
+					markup: True
+					text: 'DNS Client ID'
+					text_size: self.size
+					font_size: '17sp'
+					halign: 'center'
+					valign: 'bottom'
+				AnchorLayout:
+					size_hint: (1,0.5)
+					TextInput:
+						id: client_id_text
+						size_hint: (0.7,0.5)
+						background_color: (0.94,0.94,0.94,0)
+						border: (0,0,0,0)
+						cursor_color: (0,0,0,1)
+						foreground_color: (0,0,0,1)
+						font_size: self.height/2
+						multiline: False
+						text_size: self.size
+			    		canvas.before:
+							Color:
+								rgba: (0,0,0,1)
+							Line:
+								width: 0.4
+								rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
 			AnchorLayout:
 				size_hint: (1,0.2)
 				Button:
@@ -647,6 +706,108 @@ MainScreen:
 			            size: self.size
 			            radius: [4,]
  
+
+<DeviceCurtainWidget>:
+	size_hint_y: None
+	BoxLayout:
+		size_hint:(0.8,0.9)
+		orientation: 'horizontal'
+		spacing: 10
+		canvas.before:
+			Color:
+				rgba: (0.94,0.94,0.94,0.95)
+			RoundedRectangle:
+				pos: self.pos
+				size: self.size
+				radius: [4,]
+		BoxLayout:
+			size_hint: (0.6,1)
+			orientation: 'vertical'					
+			Label:
+				size_hint: (1,0.3)
+				markup: True
+				color: (0.3,0.3,0.3,1)
+				text: '[b]'+root.device_name+'[/b]'
+				text_size: self.size
+				font_size: '17sp'
+				halign: 'center'
+				valign: 'middle'
+
+			Label:
+				size_hint: (1,0.3)
+				color: (0.5,0.5,0.5,1)
+				markup: True
+				text: 'type'+root.device_type
+				text_size: self.size
+				font_size: '15sp'
+				halign: 'center'
+				valign: 'top'
+
+			BoxLayout:
+				orientation: 'horizontal'
+				size_hint: (1,0.4)
+				Label:
+					size_hint: (0.5,1)
+					text: "Time (sec)"
+					markup: True
+					color: (0.3,0.3,0.3,1)
+					text_size: self.size
+					font_size: '17sp'
+					halign: 'center'
+					valign: 'middle'
+
+				TextInput:
+					id: curtain_time
+					size_hint: (0.5,1)
+					background_color: (0.94,0.94,0.94,0)
+					border: (0,0,0,0)
+					cursor_color: (0,0,0,1)
+					foreground_color: (0,0,0,1)
+					font_size: self.height/2
+					multiline: False
+					text_size: self.size
+		    		canvas.before:
+						Color:
+							rgba: 0,0,0,1
+						Line:
+							width: 0.4
+							rounded_rectangle:(self.x, self.y, self.width, self.height, 2)
+		AnchorLayout:
+			size_hint: (0.3,1)
+			BoxLayout:
+				orientation: 'vertical'
+				spacing: 10
+				Button:
+					id: RemoveDevice
+					size_hint: (0.85,0.3)
+					text: 'Remove'
+					background_color: (1,1,1,0)
+					color: (1,1,1,1)
+					#on_press: root.pressed_pause()
+				    canvas.before:
+				        Color:
+				            rgba: (0,0.6,0.796,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]
+	            Button:
+					id: SetTime
+					size_hint: (0.85,0.3)
+					text: 'Set Time'
+					background_color: (1,1,1,0)
+					color: (1,1,1,1)
+					#on_press: root.pressed_pause()
+				    canvas.before:
+				        Color:
+				            rgba: (0,0.6,0.796,1)
+				        RoundedRectangle:
+				            pos: self.pos
+				            size: self.size
+				            radius: [4,]
+
+
+
  
 <DeviceWidget>:
 	size_hint_y: None
@@ -774,7 +935,7 @@ MainScreen:
 				radius: [4,]
 		Label:	
 			id: device_label
-			text: '[b]'+root.device_label+'[/b]'
+			text: '[b]'+root.device_name+'[/b]'
 			markup: True
 			color: (0.5,0.5,0.5,1)
 			#color: (0.482,0.556,0.549,1)
@@ -805,7 +966,6 @@ MainScreen:
 <FanWidget>:
 	id: fanwid
 	size_hint_y: None
-	#status: 0
 	BoxLayout:
 		orientation: 'vertical'
 		size_hint: (0.9,0.94)
@@ -818,7 +978,7 @@ MainScreen:
 				radius: [4,]
 		Label:	
 			id: on_off_label
-			text: '[b]'+root.device_label+'[/b]'
+			text: '[b]'+root.device_name+'[/b]'
 			color: (0.5,0.5,0.5,1)
 			markup: True
 			halign: 'center'
@@ -832,7 +992,6 @@ MainScreen:
 			background_width: 3
 			background_horizontal: 'black.jpg'
 			border_horizontal: [0,20,0,20]
-			value: float(root.status)
 			on_value: root.on_slid()
 			value_track: True
 			value_track_width: 2
@@ -847,7 +1006,6 @@ MainScreen:
 <CurtenWidget>:
 	id: curtwid
 	size_hint_y: None
-	#status: 'ON'
 	BoxLayout:
 		orientation: 'vertical'
 		size_hint: (0.9,0.94)
@@ -861,7 +1019,7 @@ MainScreen:
 		
 		Label:	
 			id: on_off_label
-			text: '[b]'+root.device_label+'[/b]'
+			text: '[b]'+root.device_name+'[/b]'
 			markup: True
 			color: (0.5,0.5,0.5,1)
 			text_size: self.size
@@ -869,11 +1027,11 @@ MainScreen:
 			text_size: self.size
 			font_size: '17sp'
 			valigh: 'middle'
-			size_hint: (1,0.5)
+			size_hint: (1,0.4)
 
 		
 		AnchorLayout:
-			size_hint: (1,0.5)
+			size_hint: (1,0.4)
 			BoxLayout:
 				size_hint: (0.7,0.6)
 				orientation: 'horizontal'
@@ -907,7 +1065,23 @@ MainScreen:
 				            size: self.size
 				            radius: [4,]
 
-
+        Slider:
+			id: curtain_slider
+			cursor_size: (25,25)
+			background_width: 3
+			background_horizontal: 'black.jpg'
+			border_horizontal: [0,20,0,20]
+			on_value: root.on_slid()
+			value_track: True
+			value_track_width: 2
+			value_track_color: (0,0.6,0.796,1)
+			min: 0
+			max: 100
+			orientation: 'horizontal'
+			background_color: (0,0,0,1)
+			size_hint:(1,0.2)
+			step: 5
+        
 
 <Sld>:
 	min: 0

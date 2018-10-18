@@ -45,12 +45,14 @@ class testapp(App):
 
 	def on_connect(self,client, userdata, flags, rc):
 		if rc == 0:
-				client.subscribe(self.ack_topic)
+			client.subscribe(self.ack_topic)
+			print 'client connected'
 		else:
 			print("Connection failed")
 
 	def on_message(self, client, userdata, message):
 		msg = message.payload
+		print msg
 		osc.sendMsg('/ack',[msg],port=3002)
 
 
